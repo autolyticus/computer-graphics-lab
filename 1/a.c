@@ -13,7 +13,7 @@ int main(int argc, char **argv) {
   // Single means only one window
   glutInitDisplayMode(GLUT_SINGLE);
 
-  glutInitWindowSize(500, 500);
+  glutInitWindowSize(1366, 768);
   glutCreateWindow("Bresenham Line");
 
   // Clear the screen with black color
@@ -21,7 +21,7 @@ int main(int argc, char **argv) {
 
   // Sets the angle from which you are viewing, if this is
   // same as window size Means 2d (I think)
-  gluOrtho2D(0.0, 500.0, 0.0, 500.0);
+  gluOrtho2D(0.0, 1366.0, 0.0, 768.0);
 
   // Sets the callback for main loop
   glutDisplayFunc(LineDrawer);
@@ -37,6 +37,10 @@ void setPixel(GLint x, GLint y, int r, int g, int b) {
   glColor3f(r, g, b);
   glBegin(GL_POINTS);
   glVertex2f(x, y);
+  // glVertex2f(x + 1, y + 1);
+  // glVertex2f(x - 1, y - 1);
+  // glVertex2f(x + 1, y - 1);
+  // glVertex2f(x - 1, y + 1);
   glEnd();
 }
 
@@ -77,12 +81,10 @@ void Line(int x0, int y0, int xn, int yn, int r, int g, int b) {
   }
 }
 
-void Line1() { Line(0, 0, 100, 200, 255, 255, 255); };
-void Line2() { Line(10, 10, 233, 212, 255, 255, 255); };
+void Line1() { Line(50, 50, 233, 212, 255, 255, 255); };
 
 void LineDrawer() {
   glClear(GL_COLOR_BUFFER_BIT);
   Line1();
-  Line2();
   glFinish();
 }
