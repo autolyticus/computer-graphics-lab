@@ -1,5 +1,10 @@
 #include <GL/glut.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+#define WIDTH 1366
+#define HEIGHT 768
 
 // The line function is the one that actually draws the line onto the screen
 void Line(int x1, int y1, int x2, int y2, int r, int g, int b);
@@ -13,15 +18,25 @@ int main(int argc, char **argv) {
   // Single means only one window
   glutInitDisplayMode(GLUT_SINGLE);
 
-  glutInitWindowSize(1366, 768);
+  glutInitWindowSize(WIDTH, HEIGHT);
   glutCreateWindow("Bresenham Line");
 
-  // Clear the screen with black color
-  glClearColor(0.0, 0.0, 0.0, 0.0);
+  glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+  glDepthMask(GL_TRUE);
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  glFlush();
+  usleep(100000);
 
+  glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+  // glClear(GL_COLOR_BUFFER_BIT);
+  // Clear the screen with black color
+  // glClearColor(0, 0, 0, 1);
+  glFlush();
+
+  glMatrixMode(GL_PROJECTION);
   // Sets the angle from which you are viewing, if this is
   // same as window size Means 2d (I think)
-  gluOrtho2D(0.0, 1366.0, 0.0, 768.0);
+  gluOrtho2D(0, WIDTH, 0, HEIGHT);
 
   // Sets the callback for main loop
   glutDisplayFunc(LineDrawer);
@@ -36,55 +51,114 @@ int main(int argc, char **argv) {
 void setPixel(GLint x, GLint y, int r, int g, int b) {
   glColor3f(r, g, b);
   glBegin(GL_POINTS);
-  glVertex2f(x, y);
+  glVertex2i(x, y);
   // glVertex2f(x + 1, y + 1);
   // glVertex2f(x - 1, y - 1);
   // glVertex2f(x + 1, y - 1);
   // glVertex2f(x - 1, y + 1);
   glEnd();
+  // usleep(10000);
+  // glFlush();
 }
 
-// Bresenham's Algorithm actual implementation
-void Line(int x0, int y0, int xn, int yn, int r, int g, int b) {
-  int x, y;
-  int dx, dy;
-  int pk;
-  int k;
-  // Set starting pixel
-  setPixel(x0, y0, r, g, b);
+// This functions assumes that both points are within the bounds of the drawable
+// window
+void line(int x0, int y0, int x1, int y1, int r, int g, int b) {
+  int dx = abs(x1 - x0);
+  int dy = abs(y1 - y0);
 
-  // Calculate total change in x and y
-  dx = xn - x0, dy = yn - y0;
+  int stepx;
+  if (x0 < x1)
+    stepx = 1;
+  else
+    stepx = -1;
 
-  // Initial error in slope
-  pk = 2 * dy - dx;
+  int stepy;
+  if (y0 < y1)
+    stepy = 1;
+  else
+    stepy = -1;
 
-  // Starting values
-  x = x0, y = y0;
+  int err;
+  // if slope is less than 1
+  if (dx > dy) {
+    err = dx / 2;
+  } else
+    err = -dy / 2;
 
-  // Maximum number of pixels is dx
-  for (k = 0; k < dx - 1; k++) {
-    if (pk < 0) {
-      // if error is less than 0.5 then do nothing
-      pk = pk + 2 * dy;
-    } else {
-      // if error has become more than 0.5 then increment y
-      pk = pk + 2 * dy - 2 * dx;
-      y++;
+  int e2;
+
+  for (;;) {
+    setPixel(x0, y0, r, g, b);
+    if (x0 == x1 && y0 == y1)
+      break;
+    e2 = err;
+    if (e2 > -dx) {
+      err -= dy;
+      x0 += stepx;
     }
-
-    // Increment x in either case
-    x++;
-
-    // Set the current value of x, y
-    setPixel(x, y, r, g, b);
+    if (e2 < dy) {
+      err += dx;
+      y0 += stepy;
+    }
   }
 }
 
-void Line1() { Line(50, 50, 233, 212, 255, 255, 255); };
+// // Bresenham's Algorithm actual implementation
+// void Line(int x0, int y0, int xn, int yn, int r, int g, int b) {
+//   int x, y;
+//   int dx, dy;
+//   int pk;
+//   int k;
+//   // Set starting pixel
+//   setPixel(x0, y0, r, g, b);
+
+//   // Calculate total change in x and y
+//   dx = xn - x0, dy = yn - y0;
+
+//   // Initial error in slope
+//   pk = 2 * dy - dx;
+
+//   // Starting values
+//   x = x0, y = y0;
+
+//   // Maximum number of pixels is dx
+//   for (k = 0; k < dx - 1; k++) {
+//     if (pk < 0) {
+//       // if error is less than 0.5 then do nothing
+//       pk = pk + 2 * dy;
+//     } else {
+//       // if error has become more than 0.5 then increment y
+//       pk = pk + 2 * dy - 2 * dx;
+//       y++;
+//     }
+
+//     // Increment x in either case
+//     x++;
+
+//     // Set the current value of x, y
+//     setPixel(x, y, r, g, b);
+//   }
+// }
+
+void Line1() {
+  srand(time(0));
+  // glfwGetMousePos(&xpos, &ypos);
+  while (1) {
+    // for (int i = 0; i < 1000; i++) {
+    int randHeight = rand() % HEIGHT, randWidth = rand() % WIDTH;
+    line(WIDTH / 2, HEIGHT / 2, randWidth, randHeight, rand() % 256,
+         rand() % 256, rand() % 256);
+    usleep(10000);
+    glFlush();
+    // glClear(GL_COLOR_BUFFER_BIT);
+  }
+};
 
 void LineDrawer() {
   glClear(GL_COLOR_BUFFER_BIT);
+  // usleep(100);
+  // glFlush();
   Line1();
   glFinish();
 }
