@@ -1,0 +1,8 @@
+default:
+	@echo "No targets specified."
+%.cpp.out: %.cpp
+	g++ -lglut -lGL -lGLU -g -o $@ $< -lrt -lreadline
+%.c.out: %.c
+	gcc -lglut -lGL -lGLU -g -o $@ $< -lrt -lreadline -lm
+clean:
+	rm -rf *.out
