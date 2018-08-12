@@ -52,13 +52,7 @@ void setPixel(GLint x, GLint y, int r, int g, int b) {
   glColor3f(r, g, b);
   glBegin(GL_POINTS);
   glVertex2i(x, y);
-  // glVertex2f(x + 1, y + 1);
-  // glVertex2f(x - 1, y - 1);
-  // glVertex2f(x + 1, y - 1);
-  // glVertex2f(x - 1, y + 1);
   glEnd();
-  // usleep(10000);
-  // glFlush();
 }
 
 // This functions assumes that both points are within the bounds of the drawable
@@ -104,61 +98,19 @@ void line(int x0, int y0, int x1, int y1, int r, int g, int b) {
   }
 }
 
-// // Bresenham's Algorithm actual implementation
-// void Line(int x0, int y0, int xn, int yn, int r, int g, int b) {
-//   int x, y;
-//   int dx, dy;
-//   int pk;
-//   int k;
-//   // Set starting pixel
-//   setPixel(x0, y0, r, g, b);
-
-//   // Calculate total change in x and y
-//   dx = xn - x0, dy = yn - y0;
-
-//   // Initial error in slope
-//   pk = 2 * dy - dx;
-
-//   // Starting values
-//   x = x0, y = y0;
-
-//   // Maximum number of pixels is dx
-//   for (k = 0; k < dx - 1; k++) {
-//     if (pk < 0) {
-//       // if error is less than 0.5 then do nothing
-//       pk = pk + 2 * dy;
-//     } else {
-//       // if error has become more than 0.5 then increment y
-//       pk = pk + 2 * dy - 2 * dx;
-//       y++;
-//     }
-
-//     // Increment x in either case
-//     x++;
-
-//     // Set the current value of x, y
-//     setPixel(x, y, r, g, b);
-//   }
-// }
-
 void Line1() {
   srand(time(0));
-  // glfwGetMousePos(&xpos, &ypos);
   while (1) {
-    // for (int i = 0; i < 1000; i++) {
     int randHeight = rand() % HEIGHT, randWidth = rand() % WIDTH;
     line(WIDTH / 2, HEIGHT / 2, randWidth, randHeight, rand() % 256,
          rand() % 256, rand() % 256);
     usleep(10000);
     glFlush();
-    // glClear(GL_COLOR_BUFFER_BIT);
   }
 };
 
 void LineDrawer() {
   glClear(GL_COLOR_BUFFER_BIT);
-  // usleep(100);
-  // glFlush();
   Line1();
   glFinish();
 }

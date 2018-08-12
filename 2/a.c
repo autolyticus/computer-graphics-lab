@@ -51,10 +51,15 @@ void setPixel(GLint x, GLint y, int r, int g, int b) {
   glColor3f(r, g, b);
   glBegin(GL_POINTS);
   glVertex2i(x, y);
-  // glVertex2f(x + 1, y + 1);
-  // glVertex2f(x - 1, y - 1);
-  // glVertex2f(x + 1, y - 1);
-  // glVertex2f(x - 1, y + 1);
+  // Uncomment this to get 3 pixel width
+  // glVertex2i(x + 1, y);
+  // glVertex2i(x + 1, y + 1);
+  // glVertex2i(x - 1, y - 1);
+  // glVertex2i(x + 1, y - 1);
+  // glVertex2i(x - 1, y + 1);
+  // glVertex2i(x, y + 1);
+  // glVertex2i(x, y - 1);
+  // glVertex2i(x - 1, y);
   glEnd();
   // usleep(10000);
   // glFlush();
@@ -62,21 +67,13 @@ void setPixel(GLint x, GLint y, int r, int g, int b) {
 
 void symSetPixel(int x0, int y0, int x, int y) {
   setPixel(x0 + x, y0 + y, 255, 255, 255);
-  // glFlush();
   setPixel(x0 - x, y0 + y, 255, 255, 255);
-  // glFlush();
   setPixel(x0 + x, y0 - y, 255, 255, 255);
-  // glFlush();
   setPixel(x0 - x, y0 - y, 255, 255, 255);
-  // glFlush();
   setPixel(x0 - y, y0 - x, 255, 255, 255);
-  // glFlush();
   setPixel(x0 + y, y0 - x, 255, 255, 255);
-  // glFlush();
   setPixel(x0 - y, y0 + x, 255, 255, 255);
-  // glFlush();
   setPixel(x0 + y, y0 + x, 255, 255, 255);
-  // glFlush();
 }
 
 void circle(int x0, int y0, int r0, int r, int g, int b) {
@@ -88,7 +85,7 @@ void circle(int x0, int y0, int r0, int r, int g, int b) {
   while (x >= y) {
     symSetPixel(x0, y0, x, y);
     glFlush();
-    usleep(10000);
+    usleep(1000);
 
     if (err <= 0) {
       y++;
@@ -103,40 +100,21 @@ void circle(int x0, int y0, int r0, int r, int g, int b) {
   }
 }
 
-// void circle(int x0, int y0, int r0, int r, int g, int b) {
-//   int x = 0, y = r0;
-//   int d = 3 - 2 * r;
-//   while (y >= x) {
-//     symSetPixel(x0, y0, x, y);
-//     x++;
-
-//     if (d > 0) {
-//       y--;
-//       d = d + 4 * (x - y) + 10;
-//     } else
-//       d = d + 4 * x + 6;
-//     symSetPixel(x0, y0, x, y);
-//   }
-// }
-
 void Circle1() {
   srand(time(0));
-  // glfwGetMousePos(&xpos, &ypos);
   while (1) {
-    // for (int i = 0; i < 1000; i++) {
+    // All Circles are located and random height and width, and they touch the x
+    // axis
     int randHeight = rand() % HEIGHT, randWidth = rand() % WIDTH;
-    circle(WIDTH / 2, HEIGHT / 2, randHeight, rand() % 256, rand() % 256,
+    circle(randWidth, randHeight, randHeight, rand() % 256, rand() % 256,
            rand() % 256);
     usleep(10000);
     glFlush();
-    // glClear(GL_COLOR_BUFFER_BIT);
   }
 };
 
 void Drawer() {
   glClear(GL_COLOR_BUFFER_BIT);
-  // usleep(100);
-  // glFlush();
   Circle1();
   glFinish();
 }
