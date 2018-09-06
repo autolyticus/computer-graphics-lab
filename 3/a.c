@@ -74,7 +74,7 @@ void line(int x0, int y0, int x1, int y1, int r, int g, int b) {
 
 void Line1() {
   srand(time(0));
-  line(0, 0, 300, 100, 255, 255, 255);
+  line(0, 0, 100, 300, 255, 255, 255);
   glFlush();
 };
 
