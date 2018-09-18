@@ -14,7 +14,8 @@ pygame.init()
 screen = pygame.display.set_mode((700, 350))
 done = False
 a = True
-sleepTime = 0.4
+# sleepTime = 0.05
+sleepTime = 0.2
 
 
 def drawElement(ele):
@@ -34,6 +35,8 @@ def drawFrame():
     text = pygame.transform.rotate(text, 1.5)
     screen.blit(text, [44, 102])
     pygame.display.flip()
+    global a
+    a = False
 
 
 def handleEvent(event):
@@ -44,6 +47,8 @@ def handleEvent(event):
         if event.key == pygame.K_SPACE:
             a = not a
     if event.type == pygame.MOUSEBUTTONUP:
+        if event.button == 1:
+            print(event.pos)
         if event.button == 4:
             if sleepTime != 1.0:
                 sleepTime += 0.1
