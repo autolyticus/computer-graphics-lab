@@ -8,12 +8,25 @@
 import pygame
 from stickman import stickMan
 from time import sleep
+import signal
+import sys
 
 
 pygame.init()
 screen = pygame.display.set_mode((700, 350))
 done = False
 a = True
+
+counter = 0
+
+
+def handler(a, b):
+    print(counter)
+    sys.exit(1)
+
+
+signal.signal(signal.SIGALRM, handler)
+signal.alarm(2)
 # sleepTime = 0.05
 
 
@@ -47,6 +60,7 @@ while not done:
     stick.draw()
     sleep(0.01)
     next(dancer)
+    counter += 1
     # rect.width -= 1
     pygame.display.flip()
 pygame.quit()

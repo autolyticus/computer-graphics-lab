@@ -39,7 +39,7 @@ class stickMan(object):
             if phase == 0:
                 if s.lArmAngles[0] > -20:
                     s.lArmAngles = (s.lArmAngles[0] - 1, s.lArmAngles[1] + 1)
-                    if s.lArmAngles[0] % 3 == 0:
+                    if s.lArmAngles[0] % 4 == 0:
                         s.headRect.bottom -= 1
                         s.center = (s.center[0], s.center[1] + 1)
                 else:
@@ -47,7 +47,7 @@ class stickMan(object):
             elif phase == 1:
                 if s.lArmAngles[0] < 0:
                     s.lArmAngles = (s.lArmAngles[0] + 1, s.lArmAngles[1] - 1)
-                    if s.lArmAngles[0] % 3 == 0:
+                    if s.lArmAngles[0] % 4 == 0:
                         s.headRect.bottom += 1
                         s.center = (s.center[0], s.center[1] - 1)
                 else:
